@@ -49,28 +49,20 @@ estoque* pedir(estoque* estoq, int tam) {
 
 	//lê os produtos pra o vetor
 	for (int i = 0; i < cont; i++) {
-		fin >> prod[i].nome;
+		fin >> p.nome;
 		//coloca todos os caracteres em minúculo pra facilitar a comparação
-		for (int j = 0; prod[i].nome[j]; j++) {
-			if (isupper(prod[i].nome[j]))
-				prod[i].nome[j] = tolower(prod[i].nome[j]);
+		for (int j = 0; p.nome[j]; j++) {
+			if (isupper(p.nome[j]))
+				p.nome[j] = tolower(p.nome[j]);
 		}
 		fin >> p.quant;
 
-		//fin >> p.nome;
-		////coloca todos os caracteres em minúculo pra facilitar a comparação
-		//for (int j = 0; p.nome[j]; j++) {
-		//	if (isupper(p.nome[j]))
-		//		p.nome[j] = tolower(p.nome[j]);
-		//}
-		//fin >> p.quant;
-
-		/*if (prod[i].nome == p.nome) 
+		if (prod[i].nome == p.nome) 
 			prod[i].quant += p.quant;
 		else {
 			strcpy_s(prod[i].nome, p.nome);
 			prod[i].quant = p.quant;
-		}*/
+		}
 	}
 	fin.close();
 	
