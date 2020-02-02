@@ -40,11 +40,8 @@ estoque* expansao(estoque* vetor, int* n, int* tam) {
 	estoque* vetor_aux = new estoque[*tam];
 
 	//transfere os valores do vetor original para o auxiliar
-	for (int i = 0; i < *tam; i++) {
-		strcpy_s(vetor_aux[i].nome, vetor[i].nome);
-		vetor_aux[i].preco = vetor[i].preco;
-		vetor_aux[i].quantidade = vetor[i].quantidade;
-	}
+	for (int i = 0; i < *tam; i++) 
+		vetor_aux[i] = vetor[i];
 
 	//deleta o vetor
 	delete[] vetor;
@@ -54,9 +51,7 @@ estoque* expansao(estoque* vetor, int* n, int* tam) {
 
 	//transfere os valores do vetor auxiliar para o original
 	for (int i = 0; i < *tam; i++) {
-		strcpy_s(vetor[i].nome, vetor_aux[i].nome);
-		vetor[i].preco = vetor_aux[i].preco;
-		vetor[i].quantidade = vetor_aux[i].quantidade;
+		vetor[i] = vetor_aux[i];
 		vetor[i].vazio = false;
 	}
 

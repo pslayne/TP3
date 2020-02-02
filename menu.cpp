@@ -60,8 +60,7 @@ estoque* pedir(estoque* estoq, int tam) {
 		if (prod[i].nome == p.nome) 
 			prod[i].quant += p.quant;
 		else {
-			strcpy_s(prod[i].nome, p.nome);
-			prod[i].quant = p.quant;
+			prod[i] = p;
 		}
 	}
 	fin.close();
