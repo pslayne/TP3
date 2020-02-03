@@ -46,9 +46,9 @@ estoque* pedir(estoque* estoq, int tam) {
 	//lê o nome da pizzaria e a "linha perdida"
 	fin.getline(nome_pizzaria, 30);
 	fin.getline(lp, 80);
-
+	int c = 0, fim = 0;
 	//lê os produtos pra o vetor
-	for (int i = 0; i < cont; ) {
+	for (int i = 0; i < cont; i++) {
 		fin >> p.nome;
 		//coloca todos os caracteres em minúculo pra facilitar a comparação
 		for (int j = 0; p.nome[j]; j++) {
@@ -66,33 +66,30 @@ estoque* pedir(estoque* estoq, int tam) {
 			}
 		}
 		if (!ex) {
-			prod[i++] = p;
+			prod[c++] = p;
+			fim++;
 		}
 	}
 	fin.close();
-	
-	cout << "prod\n" << endl;
-	for (int i = 0; i < cont; i++) {
-		cout << prod[i].nome << " " << prod[i].quant << endl;
-	}
 
-	estoque* recibo = new estoque[cont];
-	bool falha = false;
+	estoque* recibo = new estoque[fim];
+	bool falha = false, vazio = false;
 	int a = 0;
 
 	//checa o estoque
-	for (int i = 0; i < tam; i++) {
+	for (int i = 0; i < tam && vazio == false; i++) {
 		if (estoq[i].vazio) {
 			cout << "Pedido falhou! No momento não dispomos de todos os itens solicitados." << endl;
+			vazio = true;
 		} else {
-			for (int j = 0; j < cont; j++) {
-				if (estoq[i].nome == prod[j].nome && estoq[i].quantidade >= prod[j].quant) {
+			for (int j = 0; j < fim; j++) {
+				if (!strcmp(estoq[i].nome, prod[j].nome) && estoq[i].quantidade >= prod[j].quant) {
 					strcpy_s(recibo[a].nome, prod[j].nome);
 					recibo[a].preco = estoq[i].preco;
 					recibo[a].quantidade = prod[j].quant;
 					a++;
 				}
-				else if (estoq[i].nome == prod[j].nome && estoq[i].quantidade < prod[j].quant) {
+				else if (!strcmp(estoq[i].nome, prod[j].nome) && estoq[i].quantidade < prod[j].quant) {
 					if (!falha) {
 						cout << "Pedido falhou! " << endl;
 						falha = true;
@@ -107,8 +104,8 @@ estoque* pedir(estoque* estoq, int tam) {
 	if (!falha) {
 		for (int i = 0; i < tam; i++) {
 			if (!estoq[i].vazio) {
-				for (int j = 0; j < a + 1; j++) {
-					if (estoq[i].nome == recibo[j].nome)
+				for (int j = 0; j < fim; j++) {
+					if (!strcmp(estoq[i].nome, recibo[j].nome))
 						estoq[i].quantidade -= recibo[j].quantidade;
 					else
 						continue;
@@ -238,26 +235,27 @@ estoque* adicionar(estoque* estoq, int tam) {
 	}
 
 	//cout << tam << " " << falsos << "\n" << endl;
-
+	bool ex = false;
 	//compara o nome
 	for (int i = 0; i < tam; i++) {
 		//atualiza
 		if (!strcmp(estoq[i].nome, produto.nome)) {
 			estoq[i].preco = produto.preco;
-			estoq[i].quantidade = estoq[i].quantidade + produto.quantidade;
+			estoq[i].quantidade += produto.quantidade;
 			cout << "\nproduto atualizado! \n" << endl;
-			break;
-			} else {
-			//insere
-				strcpy_s(estoq[falsos].nome, produto.nome);
-				estoq[falsos].preco = produto.preco;
-				estoq[falsos].quantidade = produto.quantidade;
-				cout << "\nproduto adicionado! \n" << endl;
-				//manda vazio para falso
-				estoq[falsos].vazio = false;
-				break;
-			}
+			ex = true;
 		}
+	}
+
+	if (!ex) {
+		//insere
+		strcpy_s(estoq[falsos].nome, produto.nome);
+		estoq[falsos].preco = produto.preco;
+		estoq[falsos].quantidade = produto.quantidade;
+		cout << "\nproduto adicionado! \n" << endl;
+		//manda vazio para falso
+		estoq[falsos].vazio = false;
+	}
 	return estoq;
 }
 
@@ -272,7 +270,6 @@ void listar(estoque* estoq, int t) {
 		if (!estoq[i].vazio)
 			cont++;
 	}
-	cout << "\n" << cont << endl;
 	//mensagem se não houver nenhum
 	if (!cont) {
 		cout << "\nnão há produtos em estoque." << endl;
@@ -280,7 +277,7 @@ void listar(estoque* estoq, int t) {
 	else {
 		//lista se houver
 		for (int i = 0; i < cont; i++) {
-			cout << i+1 << " - " << estoq[i].nome << " - R$" << estoq[i].preco << " - " << estoq[i].quantidade << "Kg" << "\n" << endl;
+			cout << i+1 << " - " << estoq[i].nome << " - R$" << estoq[i].preco << " - " << estoq[i].quantidade << "Kg vazio = " << estoq[i].vazio << "\n" << endl;
 		}
 	}
 }

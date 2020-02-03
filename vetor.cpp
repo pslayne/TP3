@@ -6,7 +6,6 @@ using namespace std;
 //recebe um ponteiro pra estoque, e dois ponteiros pra int
 estoque* ler_bin(estoque* vetor, int* n, int* tam) {
 	ifstream fin;
-	ofstream fout;
 
 	//abre o arquivo binário
 	fin.open("estoque.bin", ios_base::in | ios_base::binary);
@@ -78,7 +77,7 @@ void escrever_bin(estoque* vetor, int* tam) {
 		if (!vetor[i].vazio)
 			cont++;
 	}
-
+	cout << "cont: " << cont << endl;
 	//abre o arquivo binário para sobrescrever
 	fout.open("estoque.bin", ios_base::out | ios_base::binary | ios_base::trunc);
 
