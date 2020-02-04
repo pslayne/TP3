@@ -74,34 +74,35 @@ estoque* pedir(estoque* estoq, int tam) {
 
 	estoque* recibo = new estoque[fim];
 	bool falha = false, vazio = false;
-	int a = 0;
+	int a = 0, z = 0;
 
 	//checa o estoque
-	for (int i = 0; i < tam && vazio == false; i++) {
-		if (estoq[i].vazio) {
-			cout << "Pedido falhou! No momento não dispomos de todos os itens solicitados." << endl;
-			vazio = true;
-		} else {
+	for (int i = 0; i < tam; i++) {
+		if (!estoq[i].vazio) {
 			for (int j = 0; j < fim; j++) {
 				if (!strcmp(estoq[i].nome, prod[j].nome) && estoq[i].quantidade >= prod[j].quant) {
 					strcpy_s(recibo[a].nome, prod[j].nome);
 					recibo[a].preco = estoq[i].preco;
 					recibo[a].quantidade = prod[j].quant;
 					a++;
-				}
-				else if (!strcmp(estoq[i].nome, prod[j].nome) && estoq[i].quantidade < prod[j].quant) {
+				} else if (!strcmp(estoq[i].nome, prod[j].nome) && estoq[i].quantidade < prod[j].quant) {
 					if (!falha) {
 						cout << "Pedido falhou! " << endl;
 						falha = true;
 					}
 					cout << prod[j].nome << ": solicitado = " << prod[j].quant << " / em estoque = " << estoq[i].quantidade << endl;
+				} else if (strcmp(estoq[i].nome, prod[j].nome) && !falha) {
+					cout << "Pedido falhou! No momento não dispomos de todos os itens solicitados." << endl;
+					vazio = true;
 				}
 			}
 		}
+		else
+			z++;
 	}
-
-	//se não falhar atualiza o estoque e gera o recibo
-	if (!falha) {
+	if (z == tam) {
+		cout << "Pedido falhou! No momento não dispomos de todos os produtos." << endl;
+	} else if (!falha && !vazio) {
 		for (int i = 0; i < tam; i++) {
 			if (!estoq[i].vazio) {
 				for (int j = 0; j < fim; j++) {
@@ -140,13 +141,11 @@ estoque* pedir(estoque* estoq, int tam) {
 		fout << "compra = R$" << compra << endl;
 		fout << "desconto = R$" << desconto << endl;
 		fout << "total = R$" << total << endl;
+
+		fout.close();
+
+		cout << "Pedido concluído com sucesso!" << endl;
 	}
-
-	/*for (int i = 0; i < cont; i++)
-		cout << prod[i].nome << " " << prod[i].quant << endl;*/
-
-	/*for (int i = 0; i < a + 1; i++)
-		cout << recibo[i].nome << " " << recibo[i].quantidade << " " << recibo[i].preco << endl;*/
 
 	cout << endl;
 	//libera a memória alocada dinamicamente
@@ -277,7 +276,7 @@ void listar(estoque* estoq, int t) {
 	else {
 		//lista se houver
 		for (int i = 0; i < cont; i++) {
-			cout << i+1 << " - " << estoq[i].nome << " - R$" << estoq[i].preco << " - " << estoq[i].quantidade << "Kg vazio = " << estoq[i].vazio << "\n" << endl;
+			cout << i+1 << " - " << estoq[i].nome << " - R$" << estoq[i].preco << " - " << estoq[i].quantidade << "Kg" << endl;
 		}
 	}
 }

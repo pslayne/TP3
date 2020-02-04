@@ -22,8 +22,12 @@ estoque* ler_bin(estoque* vetor, int* n, int* tam) {
 		vetor = new estoque[*tam];
 
 		//lê os produtos coloca no vetor e manda pra expansão 
-		for (int i = 0; i < *tam; i++)
-			fin.read((char*)vetor + i, sizeof(estoque));
+		for (int i = 0; i < *tam; i++) {
+			fin.read((char*)& (vetor + i)->nome, 30 * sizeof(char));
+			fin.read((char*)& (vetor + i)->preco, sizeof(float));
+			fin.read((char*)& (vetor + i)->quantidade, sizeof(int));
+			fin.read((char*)& (vetor + i)->vazio, sizeof(bool));
+		}
 		vetor = expansao(vetor, n, tam);
 	}
 	fin.close();
@@ -77,7 +81,6 @@ void escrever_bin(estoque* vetor, int* tam) {
 		if (!vetor[i].vazio)
 			cont++;
 	}
-	cout << "cont: " << cont << endl;
 	//abre o arquivo binário para sobrescrever
 	fout.open("estoque.bin", ios_base::out | ios_base::binary | ios_base::trunc);
 
@@ -86,7 +89,10 @@ void escrever_bin(estoque* vetor, int* tam) {
 
 	//escrita dos produtos
 	for (int i = 0; i < cont; i++) {
-		fout.write((char*)vetor + i, sizeof(estoque));
+		fout.write((char*) & (vetor + i)->nome, 30 * sizeof(char));
+		fout.write((char*) & (vetor + i)->preco, sizeof(float));
+		fout.write((char*) & (vetor + i)->quantidade, sizeof(int));
+		fout.write((char*) & (vetor + i)->vazio, sizeof(bool));
 	}
 
 	//fecha o arquivo
