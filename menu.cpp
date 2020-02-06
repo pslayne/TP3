@@ -73,36 +73,33 @@ estoque* pedir(estoque* estoq, int tam) {
 	fin.close();
 
 	estoque* recibo = new estoque[fim];
-	bool falha = false, vazio = false;
-	int a = 0, z = 0;
+	bool falha = false;
+	int a = 0;
 
 	//checa o estoque
 	for (int i = 0; i < tam; i++) {
 		if (!estoq[i].vazio) {
 			for (int j = 0; j < fim; j++) {
-				if (!strcmp(estoq[i].nome, prod[j].nome) && estoq[i].quantidade >= prod[j].quant) {
+				if ((!strcmp(estoq[i].nome, prod[j].nome)) && estoq[i].quantidade >= prod[j].quant) {
 					strcpy_s(recibo[a].nome, prod[j].nome);
 					recibo[a].preco = estoq[i].preco;
 					recibo[a].quantidade = prod[j].quant;
 					a++;
-				} else if (!strcmp(estoq[i].nome, prod[j].nome) && estoq[i].quantidade < prod[j].quant) {
+				} else if ((!strcmp(estoq[i].nome, prod[j].nome)) && estoq[i].quantidade < prod[j].quant) {
 					if (!falha) {
 						cout << "Pedido falhou! " << endl;
 						falha = true;
 					}
 					cout << prod[j].nome << ": solicitado = " << prod[j].quant << " / em estoque = " << estoq[i].quantidade << endl;
-				} else if (strcmp(estoq[i].nome, prod[j].nome) && !falha) {
-					cout << "Pedido falhou! No momento não dispomos de todos os itens solicitados." << endl;
-					vazio = true;
-				}
+				} 
 			}
 		}
-		else
-			z++;
 	}
-	if (z == tam) {
-		cout << "Pedido falhou! No momento não dispomos de todos os produtos." << endl;
-	} else if (!falha && !vazio) {
+
+	if (a != fim && !falha){
+		cout << "Pedido falhou! No momento não dispomos de todos os itens solicitados." << endl;
+	}
+	if (a == fim && !falha){
 		for (int i = 0; i < tam; i++) {
 			if (!estoq[i].vazio) {
 				for (int j = 0; j < fim; j++) {
@@ -127,7 +124,7 @@ estoque* pedir(estoque* estoq, int tam) {
 
 		//calcula o valor da compra, se há desconte e o valor final
 		float compra = 0, desconto = 0, total = 0;
-		for (int i = 0; i < cont; i++) {
+		for (int i = 0; i < fim; i++) {
 			fout << recibo[i].nome << ": " << recibo[i].quantidade << "Kg a R$" << recibo[i].preco << "/Kg = R$" << recibo[i].quantidade * recibo[i].preco << endl;
 			compra += recibo[i].quantidade * recibo[i].preco;
 		}
@@ -171,7 +168,7 @@ estoque* excluir(estoque* estoq, int tam) {
 
 	//se cont for 0
 	if (!cont) {
-		cout << "\nnão há produtos em estoque." << endl;
+		cout << "não há produtos em estoque." << endl;
 	} else {
 		//se n, lista os produtos começando de 1
 		for (int i = 0; i < cont; i++) {
@@ -180,11 +177,14 @@ estoque* excluir(estoque* estoq, int tam) {
 
 		cout << "\nnúmero do produto: "; cin >> escolha;
 		//decrementa escolha para poder usar no índice do vetor
+		while (escolha > cont || escolha < 0) {
+			cout << "\nnúmero inválido, tente novamente! "; cin >> escolha;
+		} 
 		--escolha;
 		for (int i = 0; i <= cont; i++) {
 			if (escolha == i) {
 				//confere
-				cout << "deseja excluir \"" << estoq[i].nome << "\"? (s/n) "; cin >> conf;
+				cout << "\ndeseja excluir \"" << estoq[i].nome << "\"? (s/n) "; cin >> conf;
 
 				if (conf == 's' || conf == 'S') {
 					//decrementa cont para poder usar no índice do vetor, na última posição não vazia
@@ -197,9 +197,9 @@ estoque* excluir(estoque* estoq, int tam) {
 					//manda vazio da última posição para verdadeiro
 					estoq[cont].vazio = true;
 
-					cout << "\"" << estoq[i].nome << "\" excluído com sucesso.\n" << endl;
+					cout << "\n\"" << estoq[i].nome << "\" excluído com sucesso.\n" << endl;
 				} else {
-					cout << "\"" << estoq[i].nome << "\" não foi excluído.\n" << endl;
+					cout << "\n\"" << estoq[i].nome << "\" não foi excluído.\n" << endl;
 				}
 			}
 		}
@@ -271,7 +271,7 @@ void listar(estoque* estoq, int t) {
 	}
 	//mensagem se não houver nenhum
 	if (!cont) {
-		cout << "\nnão há produtos em estoque." << endl;
+		cout << "não há produtos em estoque." << endl;
 	}
 	else {
 		//lista se houver

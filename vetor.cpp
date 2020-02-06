@@ -14,7 +14,6 @@ estoque* ler_bin(estoque* vetor, int* n, int* tam) {
 	if (!fin.is_open()) {
 		//se não abrir manda tam pra 0 e manda o vetor pra expansão
 		*tam = 0;
-		vetor = expansao(vetor, n, tam);
 	} else {
 		//se abrir pega o cabeçalho, que é o número de produtos 
 		fin.read((char*) tam, sizeof(int));
@@ -28,7 +27,6 @@ estoque* ler_bin(estoque* vetor, int* n, int* tam) {
 			fin.read((char*)& (vetor + i)->quantidade, sizeof(int));
 			fin.read((char*)& (vetor + i)->vazio, sizeof(bool));
 		}
-		vetor = expansao(vetor, n, tam);
 	}
 	fin.close();
 

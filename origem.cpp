@@ -18,55 +18,58 @@ int main() {
 	char op;
 	//contador de espaços vazios do vetor
 	int espaco;
+	bool condition = true;
 
 	//menu
 	do{
-	cout << "SISTEMA DE CONTROLE" << endl;
-	cout << "-------------------" << endl;
-	cout << "(P)edir" << endl;
-	cout << "(A)dicionar" << endl;
-	cout << "(E)xcluir" << endl;
-	cout << "(L)istar" << endl;
-	cout << "(S)air" << endl;
-	cout << "-------------------" << endl;
-	cout << "opção: \b";
-	cin >> op;
+		cout << endl;
+		cout << "SISTEMA DE CONTROLE" << endl;
+		cout << "-------------------" << endl;
+		cout << "(P)edir" << endl;
+		cout << "(A)dicionar" << endl;
+		cout << "(E)xcluir" << endl;
+		cout << "(L)istar" << endl;
+		cout << "(S)air" << endl;
+		cout << "-------------------" << endl;
+		cout << "opção: \b";
+		cin >> op;
 
-	switch (op) {
+		switch (op) {
 		//pedir
-	case 'p':
-	case 'P': vetor = pedir(vetor, tam);
-		break;
+		case 'p':
+		case 'P': vetor = pedir(vetor, tam);
+			break;
 
 		//adicionar
-	case 'a':
-	case 'A': espaco = 0;
-		for (int i = 0; i < tam; i++) {
-			if (vetor[i].vazio)
-				espaco++;
-		}
-		if (!espaco)
-			vetor = expansao(vetor, &n, &tam);
-		vetor = adicionar(vetor, tam);
-		break;
+		case 'a':
+		case 'A': espaco = 0;
+			for (int i = 0; i < tam; i++) {
+				if (vetor[i].vazio)
+					espaco++;
+			}
+			if (!espaco)
+				vetor = expansao(vetor, &n, &tam);
+			vetor = adicionar(vetor, tam);
+			break;
 
 		//excluir
-	case 'e':
-	case 'E': vetor = excluir(vetor, tam);
-		break;
+		case 'e':
+		case 'E': vetor = excluir(vetor, tam);
+			break;
 
 		//listar
-	case 'l':
-	case 'L': listar(vetor, tam);
-		break;
+		case 'l':
+		case 'L': listar(vetor, tam);
+			break;
 
 		//sair
-	case 's':
-	case 'S': break;
+		case 's':
+		case 'S': condition = false;
+			break;
 
-	default: cout << "opção inválida, tente novamente "; cin >> op;
+		default: cout << "opção inválida, tente novamente "; cin >> op;
 	}
-	} while (op != 's' && op != 'S'); //continua até que op seja s
+	} while (condition); //continua até que condition seja falso
 
 	escrever_bin(vetor, &tam);
 
