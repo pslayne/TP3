@@ -87,7 +87,7 @@ estoque* pedir(estoque* estoq, int tam) {
 					a++;
 				} else if ((!strcmp(estoq[i].nome, prod[j].nome)) && estoq[i].quantidade < prod[j].quant) {
 					if (!falha) {
-						cout << "Pedido falhou! " << endl;
+						cout << "\nPedido falhou! " << endl;
 						falha = true;
 					}
 					cout << prod[j].nome << ": solicitado = " << prod[j].quant << " / em estoque = " << estoq[i].quantidade << endl;
@@ -133,6 +133,8 @@ estoque* pedir(estoque* estoq, int tam) {
 			desconto = (float)0.1 * compra;
 			total = compra - desconto;
 		}
+		else
+			total = compra;
 
 		fout << lp << endl;
 		fout << "compra = R$" << compra << endl;
